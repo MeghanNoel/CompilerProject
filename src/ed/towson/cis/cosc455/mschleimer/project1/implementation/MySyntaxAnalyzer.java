@@ -14,6 +14,9 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else {
+			;
+			;
+			;
 			// error stuff 
 		}
 
