@@ -1,13 +1,23 @@
 package ed.towson.cis.cosc455.mschleimer.project1.implementation;
 
+import java.io.File;
+import java.util.Scanner;
+
 import edu.towson.cis.cosc455.mschleimer.project1.interfaces.LexicalAnalyzer;
 
 public class MyLexicalAnalyzer implements LexicalAnalyzer {
-
+	File file = new File("ThisPC".txt");
+	Scanner scanner = new Scanner(file); 
+	
 	@Override
 	public void getNextToken() {
-		// TODO Auto-generated method stub
-
+		
+		if(MyCompiler.currentToken.legal()){
+			//put in currentToken bin; 
+		}
+		else {
+			throw new CompilerException("Illegal element");
+		}
 	}
 
 	@Override

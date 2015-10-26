@@ -7,17 +7,14 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 	@Override
 	public void markdown() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCB)){
-			//getNextToken(); //call code method with next token
+			LexicalAnalyzer.getNextToken(); //call code method with next token
 			//stuff(MyCompiler.currentToken);
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCE)){
 				//correct and complete markdown 
 			}
 		}
 		else {
-			;
-			;
-			;
-			// error stuff 
+			throw new CompilerException("Not allowed in Markdown Language."); 
 		}
 
 	}
@@ -25,7 +22,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 	@Override
 	public void head() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.HEAD)){
-			//getNextToken(); 
+			MyLexicalAnalyzer.getNextToken(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.TITLEB)){
 				title(); 
 			}
@@ -37,7 +34,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error 
+			throw new CompilerException("Not a head part.");  
 		}
 
 	}
@@ -52,7 +49,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error message; 
+			throw new CompilerException("Not a title part."); 
 		}
 	}
 		
@@ -83,7 +80,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 		/*if(MyCompiler.currentTokens.equalsIgnoreCase(Tokens.TEXT)){
 			innerText(); WHAT IS INNERTEXT??????????????????
 		}*/
-		//error 
+		throw new CompilerException("Not allowed in body part."); 
 	}
 
 	@Override
@@ -119,7 +116,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else {
-			//error
+			throw new CompilerException("Not allowed in paragraph part."); 
 		}
 	}
 
@@ -143,7 +140,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else {
-			//error
+			throw new CompilerException("Not allowed in variable definiton"); 
 		}
 
 	}
@@ -158,7 +155,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error
+			throw new CompilerException("Not allowed for vaiable use."); 
 		}
 
 	}
@@ -173,7 +170,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else { 
-			//error
+			throw new CompilerException("Not a bold part."); 
 		}
 
 	}
@@ -188,7 +185,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error
+			throw new CompilerException("Not an italics part."); 
 		}
 
 	}
@@ -203,7 +200,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error
+			throw new CompilerException("Not allow list item part."); 
 		}
 
 	}
@@ -231,7 +228,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error
+			throw new CompilerException("Not a link part."); 
 		}
 
 	}
@@ -249,7 +246,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error
+			throw new CompilerException("Not an audio part."); 
 		}
 
 	}
@@ -267,7 +264,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			}
 		}
 		else{
-			//error
+			throw new CompilerException("Not a video part."); 
 		}
 
 	}
@@ -278,7 +275,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			//Yes it is a new line
 		}
 		else{
-			//error
+			throw new CompilerException("Not allowed for a new line."); 
 		}
 
 	}
