@@ -14,7 +14,7 @@ public class ReadFile {
 	public String[] OpenFile() throws IOException{
 		FileReader fr = new FileReader(path); 
 		BufferedReader textReader = new BufferedReader(fr);
-		int numberOfLines = readLines(); 
+		int numberOfLines = numberOfLines(); 
 		String[] textData = new String[numberOfLines]; 
 		
 		for(int i=0; i<numberOfLines; i++){
@@ -25,10 +25,9 @@ public class ReadFile {
 		return textData; 
 	}
 	
-	public int readLines() throws IOException{
+	public static int numberOfLines() throws IOException{
 		FileReader file_to_read = new FileReader(path); 
-		BufferedReader bf = new BufferedReader(file_to_read); 
-		@SuppressWarnings("unused")
+		BufferedReader bf = new BufferedReader(file_to_read);
 		String aLine; 
 		int numberOfLines = 0; 
 		while((aLine = bf.readLine())!=null){

@@ -7,7 +7,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 	@Override
 	public void markdown() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCB)){
-			LexicalAnalyzer.getNextToken(); //call code method with next token
+			MyLexicalAnalyzer.getNextToken(); //call code method with next token
 			//stuff(MyCompiler.currentToken);
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCE)){
 				//correct and complete markdown 

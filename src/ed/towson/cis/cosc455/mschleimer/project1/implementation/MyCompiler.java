@@ -5,6 +5,7 @@ import java.io.IOException;
 public class MyCompiler {
 
 	public static String currentToken = " "; 
+	
 	public static String path = "H:\\COSC 455\\Lab 3"; 
 	public static void main(String[] args) throws IOException {
 		//checks the arguments

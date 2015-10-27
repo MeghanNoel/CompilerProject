@@ -1,35 +1,52 @@
 package ed.towson.cis.cosc455.mschleimer.project1.implementation;
 
-import java.io.File;
-import java.util.Scanner;
+import java.util.Stack;
 
 import edu.towson.cis.cosc455.mschleimer.project1.interfaces.LexicalAnalyzer;
 
 public class MyLexicalAnalyzer implements LexicalAnalyzer {
-	File file = new File("ThisPC".txt");
-	Scanner scanner = new Scanner(file); 
+	Stack<String> tokens = new Stack<String>(); 
 	
+	/**
+	 * This is the public method to be called when the Syntax Analyzer needs a new
+	 * token to be parsed.
+	 */
 	@Override
 	public void getNextToken() {
-		
-		if(MyCompiler.currentToken.legal()){
-			//put in currentToken bin; 
-		}
-		else {
-			throw new CompilerException("Illegal element");
+		getCharacter(); 
+		if(isSpace(nextCharacter)){
+			if(lookupToken()){
+				tokens.push(MyCompiler.currentToken); 
+			}
+			else{
+				//error 
+			}
 		}
 	}
-
+	
+	/**
+	 * This is method gets the next character from the input and places it in
+	 * the nextCharacter class variable.
+	 *
+	 * @return the character
+	 */
 	@Override
-	public void getCharacter() {
-		// TODO Auto-generated method stub
-
+	public char getCharacter() {
+		currentPosition++;
+		return charAt(currentPosition);
 	}
-
+	
+	/**
+     * This method adds the current character the nextToken.
+     */
 	@Override
 	public void addCharacter() {
-		// TODO Auto-generated method stub
-
+		if(!isSpace(getCharacter())
+			MyCompiler.currentToken = MyCompiler.currentToken + getCharacter(); 
+		else{
+			MyCompiler.currentToken = ""; //set current token to empty
+			
+		}
 	}
 
 	@Override
@@ -40,7 +57,50 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
 
 	@Override
 	public boolean lookupToken() {
-		// TODO Auto-generated method stub
+		if(nextToken == "#BEGIN")
+			return true; 
+		if(nextToken == "#END")
+			return true;
+		if(nextToken == "^") 
+			return true; 
+		if(nextToken == "<")
+			return true; 
+		if(nextToken == ">")
+			return true; 
+		if(nextToken == "{")
+			return true; 
+		if(nextToken == "}")
+			return true; 
+		if(nextToken == "$DEF")
+			return true; 
+		if(nextToken == "$END")
+			return true; 
+		if(nextToken == "=")
+			return true; 
+		if(nextToken == "$USE")
+			return true; 
+		if(nextToken == "**")
+			return true; 
+		if(nextToken == "*")
+			return true; 
+		if(nextToken == "+")
+			return true; 
+		if(nextToken == ";")
+			return true; 
+		if(nextToken == "~")
+			return true; 
+		if(nextToken == "[")
+			return true; 
+		if(nextToken == "]")
+			return true; 
+		if(nextToken == "@")
+			return true; 
+		if(nextToken == "%")
+			return true; 
+		if(nextToken ="(")
+			return true; 
+		if(nextToken == ")")
+			return true;
 		return false;
 	}
 
