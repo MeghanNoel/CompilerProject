@@ -19,7 +19,12 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
 				tokens.push(MyCompiler.currentToken); 
 			}
 			else{
-				//error 
+				try {
+					throw new Exception("Token not valid");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			}
 		}
 	}
@@ -31,7 +36,7 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
 	 * @return the character
 	 */
 	@Override
-	public char getCharacter() {
+	public String getCharacter() {
 		currentPosition++;
 		return charAt(currentPosition);
 	}
@@ -41,65 +46,66 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
      */
 	@Override
 	public void addCharacter() {
-		if(!isSpace(getCharacter())
+		if(!isSpace(getCharacter()))
 			MyCompiler.currentToken = MyCompiler.currentToken + getCharacter(); 
 		else{
 			MyCompiler.currentToken = ""; //set current token to empty
-			
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public boolean isSpace(String c) {
-		// TODO Auto-generated method stub
+		if("c" == " ")
+			return true; 
 		return false;
 	}
 
 	@Override
 	public boolean lookupToken() {
-		if(nextToken == "#BEGIN")
+		if(MyCompiler.currentToken == "#BEGIN")
 			return true; 
-		if(nextToken == "#END")
+		if(MyCompiler.currentToken == "#END")
 			return true;
-		if(nextToken == "^") 
+		if(MyCompiler.currentToken == "^") 
 			return true; 
-		if(nextToken == "<")
+		if(MyCompiler.currentToken == "<")
 			return true; 
-		if(nextToken == ">")
+		if(MyCompiler.currentToken == ">")
 			return true; 
-		if(nextToken == "{")
+		if(MyCompiler.currentToken == "{")
 			return true; 
-		if(nextToken == "}")
+		if(MyCompiler.currentToken == "}")
 			return true; 
-		if(nextToken == "$DEF")
+		if(MyCompiler.currentToken == "$DEF")
 			return true; 
-		if(nextToken == "$END")
+		if(MyCompiler.currentToken == "$END")
 			return true; 
-		if(nextToken == "=")
+		if(MyCompiler.currentToken == "=")
 			return true; 
-		if(nextToken == "$USE")
+		if(MyCompiler.currentToken == "$USE")
 			return true; 
-		if(nextToken == "**")
+		if(MyCompiler.currentToken == "**")
 			return true; 
-		if(nextToken == "*")
+		if(MyCompiler.currentToken == "*")
 			return true; 
-		if(nextToken == "+")
+		if(MyCompiler.currentToken == "+")
 			return true; 
-		if(nextToken == ";")
+		if(MyCompiler.currentToken == ";")
 			return true; 
-		if(nextToken == "~")
+		if(MyCompiler.currentToken == "~")
 			return true; 
-		if(nextToken == "[")
+		if(MyCompiler.currentToken == "[")
 			return true; 
-		if(nextToken == "]")
+		if(MyCompiler.currentToken == "]")
 			return true; 
-		if(nextToken == "@")
+		if(MyCompiler.currentToken == "@")
 			return true; 
-		if(nextToken == "%")
+		if(MyCompiler.currentToken == "%")
 			return true; 
-		if(nextToken ="(")
+		if(MyCompiler.currentToken == "(")
 			return true; 
-		if(nextToken == ")")
+		if(MyCompiler.currentToken == ")")
 			return true;
 		return false;
 	}
