@@ -7,81 +7,88 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 	@Override
 	public void markdown() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCB)){
-			MyLexicalAnalyzer.getNextToken(); //call code method with next token
-			//stuff(MyCompiler.currentToken);
+			MyCompiler.parseTree.add(MyCompiler.currentToken);
+			MyCompiler.Lexer.getNextToken(); 
+			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DEFB))
+				variableDefine(); 
+			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.HEAD))
+				head(); 
+			body(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCE)){
-				//correct and complete markdown 
+				MyCompiler.parseTree.add(MyCompiler.currentToken); 
+				//SHOULD I CHECK IF IT IS COMPLETE???
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ "is not allowed in the markdown language"); 
 			}
 		}
 		else {
 			throw new CompilerException("Not allowed in Markdown Language."); 
 		}
 
-	}
+	}//end of markdown
 
 	@Override
 	public void head() throws CompilerException {
+		MyCompiler.parseTree.add(MyCompiler.currentToken); 
+		MyCompiler.Lexer.getNextToken(); 
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.HEAD)){
-			MyLexicalAnalyzer.getNextToken(); 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.TITLEB)){
 				title(); 
 			}
-			else {
-				//check text; 
-			}
+			text(); //check text; 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.HEAD)){
-				//Yes this is a head 
+				MyCompiler.parseTree.add(MyCompiler.currentToken); 
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed"); 
 			}
 		}
 		else{
-			throw new CompilerException("Not a head part.");  
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ "is not allowed");  
 		}
-
 	}
 
 	@Override
 	public void title() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.TITLEB)){
-			//getNextToken(); 
-			//Check Text 
+			MyCompiler.parseTree.add(MyCompiler.currentToken); 
+			MyCompiler.Lexer.getNextToken();
+			text(); //Check Text 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.TITLEE)){
-					//Yes this is a title  
+				MyCompiler.parseTree.add(MyCompiler.currentToken); 
+			}
+			else{
+				throw new CompilerException("Syntax Error: " + MyCompiler.currentToken+ " is not allowed"); 
 			}
 		}
 		else{
-			throw new CompilerException("Not a title part."); 
+			throw new CompilerException("Syntax Error: " + MyCompiler.currentToken+ " is not allowed"); 
 		}
-	}
+	}//end of title()
 		
 
 	@Override
 	public void body() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.PARAB)){
-			paragraph();
-		}
-		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LISTITEMB)){
-			listitem(); 
-		}
-		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKB)){
-			link(); 
-		}
-		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.AUDIO)){
-			audio(); 
-		}
-		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.VIDEO)){
-			video(); 
-		}
-		if(MyCompiler.currentToken.equalsIgnoreCase("$")){
-			variableUse(); 
+			paragraph(); 
+			body(); 
 		}
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.NEWLINE)){
 			newline(); 
+			body(); 
 		}
-		/*if(MyCompiler.currentTokens.equalsIgnoreCase(Tokens.TEXT)){
-			innerText(); WHAT IS INNERTEXT??????????????????
-		}*/
-		throw new CompilerException("Not allowed in body part."); 
-	}
+		if(!MyCompiler.currentToken.isEmpty()){
+			innertext(); 
+			body();
+		}
+		else{ 
+			throw new CompilerException("Syntax Error: " + MyCompiler.currentToken+ " is not allowed"); 	
+		}
+	} // end of body 
+		
 
 	@Override
 	public void paragraph() throws CompilerException {
@@ -122,55 +129,110 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 
 	@Override
 	public void innerText() throws CompilerException {
-		// TODO Auto-generated method stub
-
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.USEB)){
+			variableUse();  
+			innerText();
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.BOLD)){
+			bold(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ITALICS)){
+			italics(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LISTITEMB)){
+			listitem(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.AUDIO)){
+			audio(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.VIDEO)){
+			video(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKB)){
+			link(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.NEWLINE)){
+			newline(); 
+			innerText(); 
+		}
+		if(!MyCompiler.currentToken.isEmpty()){
+			text(); 
+			innerText(); 
+		}
+		if(MyCompiler.currentToken.isEmpty()){
+			MyCompiler.parseTree.add(MyCompiler.currentToken); 
+		}
 	}
 
 	@Override
 	public void variableDefine() throws CompilerException {
+		MyCompiler.parseTree.add(MyCompiler.currentToken);  
+		MyCompiler.Lexer.getNextToken(); 
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DEFB)){
-			//getNextToken(); 
-			//check text
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
+			text(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.EQSIGN)){
-				//getNextToken(); 
-				//check text 
+				MyCompiler.parseTree.add(MyCompiler.currentToken);  
+				MyCompiler.Lexer.getNextToken(); 
+				text(); 
 				if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DEFUSEE)){
-					//Yes it is a variable Definition
+					MyCompiler.parseTree.add(MyCompiler.currentToken); 
 				}
+				else{
+					throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
+				}
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 			}
 		}
 		else {
 			throw new CompilerException("Not allowed in variable definiton"); 
 		}
 
-	}
+	}//end of variable define
 
 	@Override
 	public void variableUse() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.USEB)){
-			//getNextToken(); 
-			//check text
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
+			text(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.DEFUSEE)){
-				//Yes it is uses a variable
+				MyCompiler.parseTree.add(MyCompiler.currentToken); 
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 			}
 		}
 		else{
-			throw new CompilerException("Not allowed for vaiable use."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 		}
 
-	}
+	}// end of variableUse()
 
 	@Override
 	public void bold() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.BOLD)){
-			//getNextToken(); 
-			//check text; 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
+			text(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.BOLD)){
-				//Yes it is bold 
+				MyCompiler.parseTree.add(MyCompiler.currentToken); 
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 			}
 		}
 		else { 
-			throw new CompilerException("Not a bold part."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 		}
 
 	}
@@ -178,57 +240,99 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 	@Override
 	public void italics() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ITALICS)){
-			//getNextToken(); 
-			//check text; 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
+			text(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ITALICS)){
-				//Yes it is italics 
+				MyCompiler.parseTree.add(MyCompiler.currentToken); 
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 			}
 		}
 		else{
-			throw new CompilerException("Not an italics part."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed"); 
 		}
 
-	}
+	}//end of italics 
 
 	@Override
 	public void listitem() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LISTITEMB)){
-			//getNextToken(); 
-			//check text and variable use 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
+			innerItem(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LISTITEME)){
-				//yes it is a list item 
+				MyCompiler.parseTree.add(MyCompiler.currentToken);
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ "is not allowed"); 
 			}
 		}
 		else{
-			throw new CompilerException("Not allow list item part."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ "is not allowed"); 
 		}
 
 	}
 
 	@Override
 	public void innerItem() throws CompilerException {
-		// TODO Auto-generated method stub
-
-	}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.USEB)){
+			variableUse(); 
+			innerItem(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.BOLD)){
+			bold(); 
+			innerItem(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ITALICS)){
+			italics(); 
+			innerItem(); 
+		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKB)){
+			link(); 
+			innerItem(); 
+		}
+		if(!MyCompiler.currentToken.isEmpty()){
+			text(); 
+			innerItem(); 
+		}
+		else{
+			MyCompiler.parseTree.add(MyCompiler.currentToken); 
+		}
+		throw new CompilerException("Syntax Error: " +MyCompiler.currentToken+ " is not allowed."); 
+	} // end of innerItem()
 
 	@Override
 	public void link() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKB)){
-			//getNextToken(); 
-			//check Text; 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken(); 
+			text(); 
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKE)){
-				//getNextToken(); 
+				MyCompiler.parseTree.add(MyCompiler.currentToken);  
+				MyCompiler.Lexer.getNextToken();  
 				if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSB)){
-					//getNextToken(); 
-					//check Text;
+					MyCompiler.parseTree.add(MyCompiler.currentToken);  
+					MyCompiler.Lexer.getNextToken(); 				//getNextToken(); 
+					text(); 
 					if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSE)){
-						//Yes it is a link 
+						MyCompiler.parseTree.add(MyCompiler.currentToken); 
+					}
+					else{
+						throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed."); 
 					}
 				}
+				else {
+					throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed.");
+				}
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed.");
 			}
 		}
 		else{
-			throw new CompilerException("Not a link part."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed."); 
 		}
 
 	}
@@ -236,48 +340,65 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 	@Override
 	public void audio() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.AUDIO)){
-			//getNextToken(); 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken();
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSB)){
-				//getNextToken();
-				//check Text; 
+				MyCompiler.parseTree.add(MyCompiler.currentToken);  
+				MyCompiler.Lexer.getNextToken();
+				text(); 
 				if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSE)){
-					//Yes it is a link
+					MyCompiler.parseTree.add(MyCompiler.currentToken); 
 				}
+				else{
+					throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed."); 
+				}
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed."); 
 			}
 		}
 		else{
-			throw new CompilerException("Not an audio part."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed."); 
 		}
 
-	}
+	}//end of audio()
 
 	@Override
 	public void video() throws CompilerException {
 		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.VIDEO)){
-			//getNextToken(); 
+			MyCompiler.parseTree.add(MyCompiler.currentToken);  
+			MyCompiler.Lexer.getNextToken();
 			if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSB)){
-				//getNextToken(); 
-				//check Text; 
+				MyCompiler.parseTree.add(MyCompiler.currentToken);  
+				MyCompiler.Lexer.getNextToken();
+				text(); 
 				if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSE)){
-					//Yes it is a video
+					MyCompiler.parseTree.add(MyCompiler.currentToken); 
 				}
+				else{
+					throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed.");
+				}
+			}
+			else{
+				throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed.");
 			}
 		}
 		else{
-			throw new CompilerException("Not a video part."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed.");
 		}
 
-	}
+	}//end of video()
 
 	@Override
 	public void newline() throws CompilerException {
-		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.NEWLINE)){
-			//Yes it is a new line
-		}
+		if(MyCompiler.currentToken.equalsIgnoreCase(Tokens.NEWLINE))
+			MyCompiler.parseTree.add(MyCompiler.currentToken);
+		else if(MyCompiler.currentToken.isEmpty())
+			MyCompiler.parseTree.add(MyCompiler.currentToken); 
 		else{
-			throw new CompilerException("Not allowed for a new line."); 
+			throw new CompilerException("Syntax Error: " +MyCompiler.currentToken + " is not allowed.");
 		}
 
-	}
+	}//end of newline()
 
 }//end of MySyntaxAnalyzer class 

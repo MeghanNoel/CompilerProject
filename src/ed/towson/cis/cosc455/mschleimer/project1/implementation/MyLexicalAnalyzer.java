@@ -6,6 +6,11 @@ import edu.towson.cis.cosc455.mschleimer.project1.interfaces.LexicalAnalyzer;
 
 public class MyLexicalAnalyzer implements LexicalAnalyzer {
 	Stack<String> tokens = new Stack<String>(); 
+	String nextCharacter = ""; 
+	String currentCharacter = ""; 
+	int currentPosition = 0; 
+	char currentChar; 
+	char nextChar; 
 	
 	/**
 	 * This is the public method to be called when the Syntax Analyzer needs a new
@@ -14,18 +19,13 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
 	@Override
 	public void getNextToken() {
 		getCharacter(); 
-		if(isSpace(nextCharacter)){
-			if(lookupToken()){
-				tokens.push(MyCompiler.currentToken); 
-			}
-			else{
-				try {
-					throw new Exception("Token not valid");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
-			}
+		while(!isSpace(currentCharacter)){
+			addCharacter(); 
+			getCharacter(); 
+		}
+		if(!lookupToken()){
+			System.err.println("Lexical Error: " + MyCompiler.currentToken + "is no a valid token.");
+			System.exit(0); 
 		}
 	}
 	
@@ -36,9 +36,10 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
 	 * @return the character
 	 */
 	@Override
-	public String getCharacter() {
-		currentPosition++;
-		return charAt(currentPosition);
+	public void getCharacter() {
+		currentChar = MyCompiler.completeFile.charAt(currentPosition);
+		currentCharacter = currentChar + ""; 
+		currentPosition ++; 
 	}
 	
 	/**
@@ -46,17 +47,15 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
      */
 	@Override
 	public void addCharacter() {
-		if(!isSpace(getCharacter()))
-			MyCompiler.currentToken = MyCompiler.currentToken + getCharacter(); 
-		else{
-			MyCompiler.currentToken = ""; //set current token to empty
-		}
+		nextChar = (MyCompiler.completeFile.charAt(currentPosition)); 
+		nextCharacter = nextChar + ""; 
+		currentPosition++; 
 	}
 
 	@SuppressWarnings("unused")
 	@Override
 	public boolean isSpace(String c) {
-		if("c" == " ")
+		if(c == " ")
 			return true; 
 		return false;
 	}
