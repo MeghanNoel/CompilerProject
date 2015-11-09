@@ -26,7 +26,7 @@ public class MyCompiler {
 	public static ArrayList<String> variableTokens; 
 	public static String pathFile = "H:\\COSC 455\\Lab 3"; 
 			
-	public static void main(String[] args){
+	public static void main(String[] args) throws CompilerException{
 		currentToken=""; 
 		completeFile=""; 
 		text =""; 
@@ -55,7 +55,7 @@ public class MyCompiler {
 		legalTokens.add(Tokens.USEB); 
 		legalTokens.add(Tokens.VIDEO);
 		
-		if(args.lenght != 1){
+		if(args.length != 1){
 			System.err.println("Error: 1 argument is required."); 
 			System.exit(0); 
 		}
@@ -76,9 +76,9 @@ public class MyCompiler {
 		int i = filename.lastIndexOf('.');
 		pathFile = filename.substring(0, i); 
 		pathFile+= ".html"; 
-		if(i>0){
-			extension=file.substring(i+1); 
-		}
+		//if(i>0){
+		//	extension=file.substring(i+1); 
+		//}
 		if(!extension.equals("markedown")){
 			System.err.println("Error! File must be a .markdown file");
 			System.exit(0); 

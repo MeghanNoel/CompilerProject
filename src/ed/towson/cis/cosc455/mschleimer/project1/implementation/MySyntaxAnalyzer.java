@@ -81,7 +81,7 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 			body(); 
 		}
 		if(!MyCompiler.currentToken.isEmpty()){
-			innertext(); 
+			innerText(); 
 			body();
 		}
 		else{ 
@@ -400,5 +400,52 @@ public class MySyntaxAnalyzer implements SyntaxAnalyzer {
 		}
 
 	}//end of newline()
+	
+	public boolean text(){
+		if(!MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.ADDRESSE))
+			return false; 		
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.AUDIO))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.BOLD))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.DEFB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.DEFUSEE))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.DOCB))
+			return false;
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.EQSIGN))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.HEAD))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.ITALICS))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.LINKE))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.LISTITEMB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.LISTITEME))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.NEWLINE))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.PARAB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.PARAE))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.TITLEB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.TITLEE))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.USEB))
+			return false; 
+		else if (!MyCompiler.currentToken.equalsIgnoreCase(Tokens.VIDEO))
+			return false; 
+		else 
+			return true; 
+	}
 
 }//end of MySyntaxAnalyzer class 

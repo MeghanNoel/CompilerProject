@@ -23,6 +23,4 @@ public class Tokens {
 	public static final String VIDEO = "%"; 
 	public static final String ADDRESSB = "("; 
 	public static final String ADDRESSE = ")"; 
-	//public static final String WS = ; 
-	//public static final String TEXT = ; 
 }
