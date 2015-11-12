@@ -1,11 +1,9 @@
 package ed.towson.cis.cosc455.mschleimer.project1.implementation;
 
-import java.util.Stack;
-
 import edu.towson.cis.cosc455.mschleimer.project1.interfaces.LexicalAnalyzer;
 
+
 public class MyLexicalAnalyzer implements LexicalAnalyzer {
-	Stack<String> tokens = new Stack<String>(); 
 	String nextCharacter = ""; 
 	String currentCharacter = ""; 
 	int currentPosition = 0; 
@@ -19,13 +17,18 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
 	@Override
 	public void getNextToken() {
 		getCharacter(); 
-		while(!isSpace(currentCharacter)){
-			addCharacter(); 
+		while(isSpace(currentCharacter)){
 			getCharacter(); 
 		}
 		if(!lookupToken()){
-			System.err.println("Lexical Error: " + MyCompiler.currentToken + "is no a valid token.");
+			System.out.println("Lexical Error: " + MyCompiler.currentToken + "is no a valid token.");
 			System.exit(0); 
+		}
+		else{
+			while(!isSpace(nextCharacter)){
+				MyCompiler.currentToken+=nextCharacter; 
+				addCharacter(); 
+			}
 		}
 	}
 	
@@ -47,17 +50,17 @@ public class MyLexicalAnalyzer implements LexicalAnalyzer {
      */
 	@Override
 	public void addCharacter() {
-		nextChar = (MyCompiler.completeFile.charAt(currentPosition)); 
+		nextChar = MyCompiler.completeFile.charAt(currentPosition); 
 		nextCharacter = nextChar + ""; 
 		currentPosition++; 
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public boolean isSpace(String c) {
-		if(c == " ")
+		if(c.trim().isEmpty())
 			return true; 
-		return false;
+		else
+			return false;
 	}
 
 	@Override

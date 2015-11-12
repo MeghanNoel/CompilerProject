@@ -7,8 +7,11 @@ public class MySemanticAnalyzer {
 		Writer writer = null; 
 		String input; 
 		
+		/** 
+		 * Creates an html file by converting the given input to html
+		 */
 		try{
-			writer = new BufferedWriter(new FileWriter(MyCompiler.pathFile)); 
+			writer = new BufferedWriter(new FileWriter(MyCompiler.htmlFileStr)); 
 			for ( int i = 0; i<MyCompiler.parseTree.size(); i++){
 				input = MyCompiler.parseTree.get(i); 
 				if(input.equalsIgnoreCase(Tokens.DOCB))
